@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Practica3.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[client-controller]")]
     public class ClientController : ControllerBase
     {
         private readonly ILogger<ClientController> _logger;
@@ -19,7 +19,33 @@ namespace Practica3.Controllers
         }
 
         [HttpGet]
+        [Route("[internal-clients]")]
         public IActionResult Get()
+        {
+            return Ok();
+        }
+        [HttpPost]
+        [Route("[internal-clients]")]
+        public IActionResult Post()
+        {
+            return Ok();
+        }
+        [HttpPut]
+        [Route("[internal-clients]")]
+        public IActionResult Put()
+        {
+            return Ok();
+        }
+        [HttpDelete]
+        [Route("[internal-clients]")]
+        public IActionResult Delete()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("[external-clients]")]
+        public IActionResult GetExternals([FromHeader]int clients)
         {
             return Ok();
         }

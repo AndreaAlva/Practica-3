@@ -4,20 +4,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Practica3", "Practica3\Practica3.csproj", "{3AE1D485-680A-46A2-BCA4-7B6AB4442FBC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientsLogic", "ClientsLogic", "{FE070B49-A988-475B-83C6-47229EA38D35}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manager", "Manager", "{C6B4ECCA-9B30-461E-85A0-92DFDBCE6495}"
-	ProjectSection(SolutionItems) = preProject
-		ExternalClientManager.cs = ExternalClientManager.cs
-		InternalClientMAnager.cs = InternalClientMAnager.cs
+	ProjectSection(ProjectDependencies) = postProject
+		{4B26F496-C1B8-4266-9484-6BE5A427B92C} = {4B26F496-C1B8-4266-9484-6BE5A427B92C}
+		{3FE901CD-62B1-4F53-B772-DF11C831035A} = {3FE901CD-62B1-4F53-B772-DF11C831035A}
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientLogic", "ClientLogic", "{FE070B49-A988-475B-83C6-47229EA38D35}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{333D7FFC-2B2A-4649-B60E-DF25F87A1D01}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Principal", "Principal", "{2E6EABE0-54A0-433D-B375-62DD7AAC3606}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalCServices", "ExternalCServices\ExternalCServices.csproj", "{4B26F496-C1B8-4266-9484-6BE5A427B92C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalCServices", "ExternalCServices\ExternalCServices.csproj", "{4B26F496-C1B8-4266-9484-6BE5A427B92C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLogic", "ClientLogic\ClientLogic.csproj", "{3FE901CD-62B1-4F53-B772-DF11C831035A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4B26F496-C1B8-4266-9484-6BE5A427B92C} = {4B26F496-C1B8-4266-9484-6BE5A427B92C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +36,18 @@ Global
 		{4B26F496-C1B8-4266-9484-6BE5A427B92C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B26F496-C1B8-4266-9484-6BE5A427B92C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B26F496-C1B8-4266-9484-6BE5A427B92C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FE901CD-62B1-4F53-B772-DF11C831035A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE901CD-62B1-4F53-B772-DF11C831035A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE901CD-62B1-4F53-B772-DF11C831035A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE901CD-62B1-4F53-B772-DF11C831035A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3AE1D485-680A-46A2-BCA4-7B6AB4442FBC} = {2E6EABE0-54A0-433D-B375-62DD7AAC3606}
-		{C6B4ECCA-9B30-461E-85A0-92DFDBCE6495} = {FE070B49-A988-475B-83C6-47229EA38D35}
 		{4B26F496-C1B8-4266-9484-6BE5A427B92C} = {333D7FFC-2B2A-4649-B60E-DF25F87A1D01}
+		{3FE901CD-62B1-4F53-B772-DF11C831035A} = {FE070B49-A988-475B-83C6-47229EA38D35}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6AAD853C-79CE-4D2F-A879-67D1EC5DCD17}

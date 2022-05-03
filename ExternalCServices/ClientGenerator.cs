@@ -2,7 +2,7 @@
 
 namespace ExternalCServices
 {
-    public class Class1
+    public class ClientGenerator
     {
     }
 }
