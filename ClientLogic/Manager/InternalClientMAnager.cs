@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ClientLogic
+namespace ClientLogic.Manager
 {
 	public class InternalClientManager
 	{

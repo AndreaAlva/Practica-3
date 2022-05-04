@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClientLogic.Manager;
+using ExternalCServices;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,43 +10,45 @@ using System.Threading.Tasks;
 namespace Practica3.Controllers
 {
     [ApiController]
-    [Route("[client-controller]")]
+    [Route("/client-controller")]
     public class ClientController : ControllerBase
     {
-        private readonly ILogger<ClientController> _logger;
+        private ExternalClientManager _externalClientManager;
+        private InternalClientManager _internalClientManager;
 
-        public ClientController(ILogger<ClientController> logger)
+        public ClientController(ExternalClientManager externalClientManager, InternalClientManager internalClientMAnager,ClientGenerator clientGenerator)
         {
-            _logger = logger;
+            _externalClientManager = externalClientManager;
+            _internalClientManager = internalClientMAnager;
         }
 
         [HttpGet]
-        [Route("[internal-clients]")]
+        [Route("/internal-clients")]
         public IActionResult Get()
         {
             return Ok();
         }
         [HttpPost]
-        [Route("[internal-clients]")]
+        [Route("/internal-clients")]
         public IActionResult Post()
         {
             return Ok();
         }
         [HttpPut]
-        [Route("[internal-clients]")]
+        [Route("/internal-clients")]
         public IActionResult Put()
         {
             return Ok();
         }
         [HttpDelete]
-        [Route("[internal-clients]")]
+        [Route("/internal-clients")]
         public IActionResult Delete()
         {
             return Ok();
         }
 
         [HttpGet]
-        [Route("[external-clients]")]
+        [Route("/external-clients")]
         public IActionResult GetExternals([FromHeader]int clients)
         {
             return Ok();

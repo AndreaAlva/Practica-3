@@ -1,0 +1,12 @@
+D:\Git examples\Practica3\ExternalCServices\bin\Debug\net5.0\ExternalCServices.deps.json
+D:\Git examples\Practica3\ExternalCServices\bin\Debug\net5.0\ExternalCServices.dll
+D:\Git examples\Practica3\ExternalCServices\bin\Debug\net5.0\ref\ExternalCServices.dll
+D:\Git examples\Practica3\ExternalCServices\bin\Debug\net5.0\ExternalCServices.pdb
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.csproj.AssemblyReference.cache
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.AssemblyInfoInputs.cache
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.AssemblyInfo.cs
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.csproj.CoreCompileInputs.cache
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.dll
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ref\ExternalCServices.dll
+D:\Git examples\Practica3\ExternalCServices\obj\Debug\net5.0\ExternalCServices.pdb
