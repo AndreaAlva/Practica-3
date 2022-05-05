@@ -1,3 +1,5 @@
+using ClientLogic.Manager;
+using ExternalCServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,9 +18,15 @@ namespace Practica3
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -32,6 +40,9 @@ namespace Practica3
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Practica3", Version = "v1" });
             });
+            services.AddSingleton<ExternalClientManager>();
+            services.AddSingleton<InternalClientManager>();
+            services.AddTransient<ClientGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
