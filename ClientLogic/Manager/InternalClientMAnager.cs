@@ -1,14 +1,20 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using ExternalCServices;
 
 namespace ClientLogic.Manager
 {
 	public class InternalClientManager
 	{
         private List<InternalClient> clients;
+        private IConfiguration _configuration;
+        private ClientGenerator _service;
 
-        public InternalClientManager()
+        public InternalClientManager(IConfiguration configuration, ClientGenerator service)
         {
+            _configuration = configuration;
+            _service = service;
             clients = new List<InternalClient>();
         }
 
@@ -16,14 +22,14 @@ namespace ClientLogic.Manager
         {
             return clients;
         }
-        public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, int phone, int ranking)
+        public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, string phone, int ranking)
         {
             string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + seclastname[0].ToString().ToUpper() + "-" + CI.ToString();
             InternalClient client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno= seclastname, CI = CI, Direccion=address, Telefono=phone,Ranking=ranking, CodigoCliente=codigocliente };
             clients.Add(client);
             return client;
         }
-        public InternalClient updateClients(string address, int phone, string codigo)
+        public InternalClient updateClients(string address, string phone, string codigo)
         {
             InternalClient client = null;
             clients.ForEach(c =>
@@ -38,6 +44,29 @@ namespace ClientLogic.Manager
             InternalClient client = clients.Find(p => p.CodigoCliente == codigo);
             clients.Remove(client);
             return client;
+        }
+
+        public List<InternalClient> GetExternalStudents(int clientes)
+        {
+            InternalClient client;
+            for (int i = 0; i < clientes; i++)
+            {
+                var externalClient = _service.GetClient();
+                string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "-" + externalClient.Result.Id.ToString();
+                client = new InternalClient()
+                {
+                    Nombre = externalClient.Result.First_name,
+                    ApellidoPaterno = externalClient.Result.Last_name,
+                    ApellidoMaterno = "No Specified",
+                    CI = externalClient.Result.Id,
+                    Direccion = externalClient.Result.Address.City + ", " + externalClient.Result.Address.Street_name,
+                    Telefono = (externalClient.Result.Phone_number),
+                    Ranking = -1,
+                    CodigoCliente = codigocliente,
+                };
+                clients.Add(client);
+            }
+            return clients;
         }
     }
 
