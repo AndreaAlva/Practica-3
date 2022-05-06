@@ -40,7 +40,6 @@ namespace Practica3
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Practica3", Version = "v1" });
             });
-            services.AddSingleton<ExternalClientManager>();
             services.AddSingleton<InternalClientManager>();
             services.AddTransient<ClientGenerator>();
         }

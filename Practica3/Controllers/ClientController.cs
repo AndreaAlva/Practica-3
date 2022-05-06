@@ -13,12 +13,11 @@ namespace Practica3.Controllers
     [Route("/client-controller")]
     public class ClientController : ControllerBase
     {
-        private ExternalClientManager _externalClientManager;
+        
         private InternalClientManager _internalClientManager;
 
-        public ClientController(ExternalClientManager externalClientManager, InternalClientManager internalClientMAnager,ClientGenerator clientGenerator)
+        public ClientController(InternalClientManager internalClientMAnager,ClientGenerator clientGenerator)
         {
-            _externalClientManager = externalClientManager;
             _internalClientManager = internalClientMAnager;
         }
 
@@ -30,13 +29,13 @@ namespace Practica3.Controllers
         }
         [HttpPost]
         [Route("/internal-clients")]
-        public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]int Telefono, [FromHeader]int Ramking )
+        public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]string Telefono, [FromHeader]int Ramking )
         {
             return Ok(_internalClientManager.createClients(Nombre,PrimerApellido,SegundoApellido,CI,Direccion,Telefono,Ramking));
         }
         [HttpPut]
         [Route("/internal-clients")]
-        public IActionResult Put([FromHeader]string Codigo,[FromHeader]string Direccion, [FromHeader]int Telefono)
+        public IActionResult Put([FromHeader]string Codigo,[FromHeader]string Direccion, [FromHeader]string Telefono)
         {
             return Ok(_internalClientManager.updateClients(Direccion,Telefono,Codigo));
         }
@@ -51,7 +50,7 @@ namespace Practica3.Controllers
         [Route("/external-clients")]
         public IActionResult GetExternals([FromHeader]int clients)  //clients es el numero de clientes externos que se quiere pedir 
         {
-            return Ok(_externalClientManager.GetStudents(clients));
+            return Ok(_internalClientManager.GetExternalStudents(clients));
         }
     }
 }

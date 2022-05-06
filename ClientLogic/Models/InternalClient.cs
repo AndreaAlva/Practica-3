@@ -9,7 +9,7 @@ namespace ClientLogic
         public string ApellidoMaterno { get; set; }
         public int CI { get; set; }
         public string Direccion { get; set; }
-        public int Telefono { get; set; }
+        public string Telefono { get; set; }
         public int Ranking { get; set; }
         public string CodigoCliente { get; set; }
 
