@@ -8,12 +8,10 @@ namespace ClientLogic.Manager
 	public class InternalClientManager
 	{
         private List<InternalClient> clients;
-        private IConfiguration _configuration;
         private ClientGenerator _service;
 
-        public InternalClientManager(IConfiguration configuration, ClientGenerator service)
+        public InternalClientManager(ClientGenerator service)
         {
-            _configuration = configuration;
             _service = service;
             clients = new List<InternalClient>();
         }
@@ -46,7 +44,7 @@ namespace ClientLogic.Manager
             return client;
         }
 
-        public List<InternalClient> GetExternalStudents(int clientes)
+        public List<InternalClient> GetExternalClients(int clientes)
         {
             InternalClient client;
             for (int i = 0; i < clientes; i++)

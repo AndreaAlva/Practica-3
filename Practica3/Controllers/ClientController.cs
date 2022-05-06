@@ -16,7 +16,7 @@ namespace Practica3.Controllers
         
         private InternalClientManager _internalClientManager;
 
-        public ClientController(InternalClientManager internalClientMAnager,ClientGenerator clientGenerator)
+        public ClientController(InternalClientManager internalClientMAnager)
         {
             _internalClientManager = internalClientMAnager;
         }
@@ -29,9 +29,9 @@ namespace Practica3.Controllers
         }
         [HttpPost]
         [Route("/internal-clients")]
-        public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]string Telefono, [FromHeader]int Ramking )
+        public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]string Telefono, [FromHeader]int Ranking )
         {
-            return Ok(_internalClientManager.createClients(Nombre,PrimerApellido,SegundoApellido,CI,Direccion,Telefono,Ramking));
+            return Ok(_internalClientManager.createClients(Nombre,PrimerApellido,SegundoApellido,CI,Direccion,Telefono,Ranking));
         }
         [HttpPut]
         [Route("/internal-clients")]
@@ -50,7 +50,7 @@ namespace Practica3.Controllers
         [Route("/external-clients")]
         public IActionResult GetExternals([FromHeader]int clients)  //clients es el numero de clientes externos que se quiere pedir 
         {
-            return Ok(_internalClientManager.GetExternalStudents(clients));
+            return Ok(_internalClientManager.GetExternalClients(clients));
         }
     }
 }
