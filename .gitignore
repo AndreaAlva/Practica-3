@@ -1,4 +1,7 @@
 .vs/
 Practica3/bin
 Practica3/obj
-
+ClientLogic/bin
+ClientLogic/obj
+EXternalCService/bin
+EXternalCService/obj
