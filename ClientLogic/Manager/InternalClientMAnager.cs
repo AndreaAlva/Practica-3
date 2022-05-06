@@ -12,18 +12,18 @@ namespace ClientLogic.Manager
             clients = new List<InternalClient>();
         }
 
-        public List<InternalClient> getPatients()
+        public List<InternalClient> getClients()
         {
             return clients;
         }
-        public InternalClient createPatient(string name, string lastname,string seclastname, int CI, string address, int phone, int ranking)
+        public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, int phone, int ranking)
         {
             string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + seclastname[0].ToString().ToUpper() + "-" + CI.ToString();
             InternalClient client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno= seclastname, CI = CI, Direccion=address, Telefono=phone,Ranking=ranking, CodigoCliente=codigocliente };
             clients.Add(client);
             return client;
         }
-        public InternalClient updatePatient(string address, int phone, string codigo)
+        public InternalClient updateClients(string address, int phone, string codigo)
         {
             InternalClient client = null;
             clients.ForEach(c =>
@@ -33,9 +33,9 @@ namespace ClientLogic.Manager
             });
             return client;
         }
-        public InternalClient removePatient(int ci)
+        public InternalClient removeClients(string codigo)
         {
-            InternalClient client = clients.Find(p => p.CI == ci);
+            InternalClient client = clients.Find(p => p.CodigoCliente == codigo);
             clients.Remove(client);
             return client;
         }
