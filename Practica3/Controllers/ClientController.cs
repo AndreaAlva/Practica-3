@@ -1,4 +1,5 @@
 ﻿using ClientLogic.Manager;
+using ClientLogic;
 using ExternalCServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.IO;
+using System.Text;
 
 namespace Practica3.Controllers
 {
@@ -29,9 +33,12 @@ namespace Practica3.Controllers
         }
         [HttpPost]
         [Route("/internal-clients")]
-        public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]string Telefono, [FromHeader]int Ramking )
+        public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]string Telefono, [FromHeader]int Ranking )
         {
-            return Ok(_internalClientManager.createClients(Nombre,PrimerApellido,SegundoApellido,CI,Direccion,Telefono,Ramking));
+            InternalClient created = _internalClientManager.createClients(Nombre, PrimerApellido, SegundoApellido, CI, Direccion, Telefono, Ranking);
+            string json = JsonConvert.SerializeObject(_internalClientManager.getClients());
+            System.IO.File.WriteAllText(@"..\Practica3\JSONDB\clients.txt", json);
+            return Ok(created);
         }
         [HttpPut]
         [Route("/internal-clients")]
