@@ -48,10 +48,12 @@ namespace ClientLogic.Manager
 
         public List<InternalClient> GetExternalStudents(int clientes)
         {
+            List<InternalClient> externalClients = new List<InternalClient>();
             InternalClient client;
             for (int i = 0; i < clientes; i++)
             {
                 var externalClient = _service.GetClient();
+                //map External To Internal
                 string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "-" + externalClient.Result.Id.ToString();
                 client = new InternalClient()
                 {
@@ -64,10 +66,11 @@ namespace ClientLogic.Manager
                     Ranking = -1,
                     CodigoCliente = codigocliente,
                 };
-                clients.Add(client);
+                externalClients.Add(client);
             }
-            return clients;
+            return externalClients;
         }
+
     }
 
 }
