@@ -25,7 +25,7 @@ namespace Practica3.Controllers
             _internalClientManager = internalClientMAnager;
             try
             {
-                _internalClientManager.SetClientsFromDB(JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(@"..\Practica3\JSONDB\clients.txt")));
+                _internalClientManager.SetClientsFromDB(JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(@"..\Practica3\clients.txt")));
             }
             catch (Exception e)
             {
@@ -47,20 +47,26 @@ namespace Practica3.Controllers
         {
             InternalClient created = _internalClientManager.createClients(Nombre, PrimerApellido, SegundoApellido, CI, Direccion, Telefono, Ranking);
             string json = JsonConvert.SerializeObject(_internalClientManager.getClients());
-            System.IO.File.WriteAllText(@"..\Practica3\JSONDB\clients.txt", json);
+            System.IO.File.WriteAllText(@"..\Practica3\clients.txt", json);
             return Ok(created);
         }
         [HttpPut]
         [Route("/internal-clients")]
         public IActionResult Put([FromHeader]string Codigo,[FromHeader]string Direccion, [FromHeader]string Telefono)
         {
-            return Ok(_internalClientManager.updateClients(Direccion,Telefono,Codigo));
+            InternalClient edited = _internalClientManager.updateClients(Direccion, Telefono, Codigo);
+            string json = JsonConvert.SerializeObject(_internalClientManager.getClients());
+            System.IO.File.WriteAllText(@"..\Practica3\clients.txt", json);
+            return Ok(edited);
         }
         [HttpDelete]
         [Route("/internal-clients")]
         public IActionResult Delete([FromHeader]string Codigo)
         {
-            return Ok(_internalClientManager.removeClients(Codigo));
+            InternalClient deleted = _internalClientManager.removeClients(Codigo);
+            string json = JsonConvert.SerializeObject(_internalClientManager.getClients());
+            System.IO.File.WriteAllText(@"..\Practica3\clients.txt", json);
+            return Ok(deleted);
         }
 
         [HttpGet]
