@@ -23,6 +23,16 @@ namespace Practica3.Controllers
         public ClientController(InternalClientManager internalClientMAnager,ClientGenerator clientGenerator)
         {
             _internalClientManager = internalClientMAnager;
+            try
+            {
+                _internalClientManager.SetClientsFromDB(JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(@"..\Practica3\JSONDB\clients.txt")));
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("No DB created yet");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
 
         [HttpGet]

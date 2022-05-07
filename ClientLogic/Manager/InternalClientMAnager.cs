@@ -71,6 +71,11 @@ namespace ClientLogic.Manager
             return externalClients;
         }
 
+        public void SetClientsFromDB(List<InternalClient> retrievedClients)
+        {
+            clients = retrievedClients;
+        }
+
     }
 
 }
