@@ -27,7 +27,7 @@ namespace ClientLogic.Manager
             InternalClient client;
             if (seclastname == null)
             {
-                string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "-" + CI.ToString();
+                string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "_-" + CI.ToString();
                 client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = "No Specified", CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
             }
             else
@@ -64,7 +64,7 @@ namespace ClientLogic.Manager
             {
                 var externalClient = _service.GetClient();
                 //map External To Internal
-                string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "-" + externalClient.Result.Id.ToString();
+                string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "_-" + externalClient.Result.Id.ToString();
                 client = new InternalClient()
                 {
                     Nombre = externalClient.Result.First_name,
