@@ -24,8 +24,18 @@ namespace ClientLogic.Manager
         }
         public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, string phone, int ranking)
         {
-            string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + seclastname[0].ToString().ToUpper() + "-" + CI.ToString();
-            InternalClient client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno= seclastname, CI = CI, Direccion=address, Telefono=phone,Ranking=ranking, CodigoCliente=codigocliente };
+            InternalClient client;
+            if (seclastname == null)
+            {
+                string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "-" + CI.ToString();
+                client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = "No Specified", CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
+            }
+            else
+            {
+                string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + seclastname[0].ToString().ToUpper() + "-" + CI.ToString();
+                client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = seclastname, CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
+            }
+
             clients.Add(client);
             return client;
         }
