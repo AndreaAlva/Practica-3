@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using ExternalCServices;
+using Newtonsoft.Json;
 
 namespace ClientLogic.Manager
 {
@@ -9,32 +10,47 @@ namespace ClientLogic.Manager
 	{
         private List<InternalClient> clients;
         private ClientGenerator _service;
+        private IConfiguration config;
 
-        public InternalClientManager(ClientGenerator service)
+        public InternalClientManager(ClientGenerator service,IConfiguration configuration)
         {
             _service = service;
             clients = new List<InternalClient>();
+            config = configuration;
+            try
+            {
+                System.IO.File.ReadAllText(config.GetSection("client_path").Value);
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("No DB created yet" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
 
         public List<InternalClient> getClients()
         {
-            return clients;
+            return JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
         }
         public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, string phone, int ranking)
         {
             InternalClient client;
+            string codigocliente;
             if (seclastname == null)
             {
-                string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "_-" + CI.ToString();
-                client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = "No Specified", CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
+                codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "_-" + CI.ToString();
+                seclastname = "No Specified";  
             }
             else
             {
-                string codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + seclastname[0].ToString().ToUpper() + "-" + CI.ToString();
-                client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = seclastname, CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
+                codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + seclastname[0].ToString().ToUpper() + "-" + CI.ToString();
             }
-
+            client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = seclastname, CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
             clients.Add(client);
+
+            string json = JsonConvert.SerializeObject(clients);
+            System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
             return client;
         }
         public InternalClient updateClients(string address, string phone, string codigo)
@@ -45,12 +61,16 @@ namespace ClientLogic.Manager
                 if (c.CodigoCliente == codigo)
                     c.Direccion = address; c.Telefono = phone; client =c;
             });
+            string json = JsonConvert.SerializeObject(clients);
+            System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
             return client;
         }
         public InternalClient removeClients(string codigo)
         {
             InternalClient client = clients.Find(p => p.CodigoCliente == codigo);
             clients.Remove(client);
+            string json = JsonConvert.SerializeObject(clients);
+            System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
             return client;
         }
 
@@ -78,12 +98,6 @@ namespace ClientLogic.Manager
             }
             return externalClients;
         }
-
-        public void SetClientsFromDB(List<InternalClient> retrievedClients)
-        {
-            clients = retrievedClients;
-        }
-
     }
 
 }

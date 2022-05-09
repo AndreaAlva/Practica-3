@@ -13,13 +13,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientLogic", "ClientLogic"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{333D7FFC-2B2A-4649-B60E-DF25F87A1D01}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Principal", "Principal", "{2E6EABE0-54A0-433D-B375-62DD7AAC3606}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{2E6EABE0-54A0-433D-B375-62DD7AAC3606}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalCServices", "ExternalCServices\ExternalCServices.csproj", "{4B26F496-C1B8-4266-9484-6BE5A427B92C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLogic", "ClientLogic\ClientLogic.csproj", "{3FE901CD-62B1-4F53-B772-DF11C831035A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B26F496-C1B8-4266-9484-6BE5A427B92C} = {4B26F496-C1B8-4266-9484-6BE5A427B92C}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataBase", "DataBase", "{3F0146F2-25D2-4E9F-8D09-F607E5B3D279}"
+	ProjectSection(SolutionItems) = preProject
+		clients.json = clients.json
 	EndProjectSection
 EndProject
 Global
