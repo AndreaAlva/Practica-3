@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using ExternalCServices;
 using Newtonsoft.Json;
+using ClientLogic.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace ClientLogic.Manager
 {
@@ -17,30 +19,32 @@ namespace ClientLogic.Manager
             _service = service;
             clients = new List<InternalClient>();
             config = configuration;
-            try
-            {
-                System.IO.File.ReadAllText(config.GetSection("client_path").Value);
-            }
-            catch (Exception e)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No DB created yet" + e.Message);
-                Console.ForegroundColor = ConsoleColor.White;
-            }
         }
 
         public List<InternalClient> getClients()
         {
-            return JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
+            try
+            {
+                return JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new ClientDatabaseException("Couldn't read json file");
+            }
+           
         }
         public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, string phone, int ranking)
         {
             InternalClient client;
             string codigocliente;
+            if (ranking < 1 || ranking > 5)
+                throw new ClientInvalidInputException("Ranking out of range. Ranking should be between 1 and 5 ");
+
             if (seclastname == null)
             {
                 codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "_-" + CI.ToString();
-                seclastname = "No Specified";  
+                seclastname = "No Specified";
             }
             else
             {
@@ -48,29 +52,38 @@ namespace ClientLogic.Manager
             }
             client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = seclastname, CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
             clients.Add(client);
-
-            string json = JsonConvert.SerializeObject(clients);
-            System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+            WriteJson(clients);
             return client;
+
         }
         public InternalClient updateClients(string address, string phone, string codigo)
         {
-            InternalClient client = null;
-            clients.ForEach(c =>
+            InternalClient client= clients.Find(c => c.CodigoCliente == codigo);
+            if(client != null)
             {
-                if (c.CodigoCliente == codigo)
-                    c.Direccion = address; c.Telefono = phone; client =c;
-            });
-            string json = JsonConvert.SerializeObject(clients);
-            System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+                client.Direccion = address;
+                client.Telefono = phone;
+                WriteJson(clients);
+            }
+            else
+            {
+                throw new ClientNotFoundException("Client does not exists");
+            }
             return client;
         }
         public InternalClient removeClients(string codigo)
         {
             InternalClient client = clients.Find(p => p.CodigoCliente == codigo);
-            clients.Remove(client);
-            string json = JsonConvert.SerializeObject(clients);
-            System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+            if (client != null)
+            {
+                clients.Remove(client);
+                WriteJson(clients);
+            }
+            else
+            {
+                throw new ClientNotFoundException("Client does not exists");
+               
+            }
             return client;
         }
 
@@ -81,7 +94,6 @@ namespace ClientLogic.Manager
             for (int i = 0; i < clientes; i++)
             {
                 var externalClient = _service.GetClient();
-                //map External To Internal
                 string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "_-" + externalClient.Result.Id.ToString();
                 client = new InternalClient()
                 {
@@ -97,6 +109,20 @@ namespace ClientLogic.Manager
                 externalClients.Add(client);
             }
             return externalClients;
+        }
+
+        private void WriteJson(List<InternalClient> clients)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(clients);
+                System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new ClientDatabaseException("Couldn't write jsonfile");
+            }
         }
     }
 

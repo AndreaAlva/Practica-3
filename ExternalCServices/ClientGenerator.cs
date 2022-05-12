@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ExternalCServices.Exceptions;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -15,22 +16,31 @@ namespace ExternalCServices
         }
         public async Task<ExternalClient> GetClient()
         {
-            string clientsURL = configuration.GetSection("clientsURL").Value;
-            HttpClient client = new HttpClient();
-            HttpResponseMessage reponse = await client.GetAsync(clientsURL);
-
-            ExternalClient clients;
-            if (reponse.IsSuccessStatusCode)
+            try
             {
-                string responseData = await reponse.Content.ReadAsStringAsync();
-                clients = JsonConvert.DeserializeObject<ExternalClient>(responseData);
+                string clientsURL = configuration.GetSection("clientsURL").Value;
+                ExternalClient clients;
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage reponse = await client.GetAsync(clientsURL);
+                    
+                    if (reponse.IsSuccessStatusCode)
+                    {
+                        string responseData = await reponse.Content.ReadAsStringAsync();
+                        clients = JsonConvert.DeserializeObject<ExternalClient>(responseData);
+                    }
+                    else
+                    {
+                        throw new ExternalClientServiceNotFoundException("Service not found ");
+                    }
+                }
+                return clients;
             }
-            else
+            catch(Exception)
             {
-                clients = new ExternalClient();
+                throw new ExternalClientServiceException("Something happend: Backing service error");
             }
-
-            return clients;
+           
         }
     }
 }
