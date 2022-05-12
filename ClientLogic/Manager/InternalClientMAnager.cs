@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using ExternalCServices;
 using Newtonsoft.Json;
-
+using Serilog;
 namespace ClientLogic.Manager
 {
 	public class InternalClientManager
@@ -31,7 +31,9 @@ namespace ClientLogic.Manager
 
         public List<InternalClient> getClients()
         {
-            return JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
+            List<InternalClient> retrieved = JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
+            Log.Information("Clients Retrieved Succesfully");
+            return retrieved;
         }
         public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, string phone, int ranking)
         {
@@ -48,9 +50,10 @@ namespace ClientLogic.Manager
             }
             client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = seclastname, CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
             clients.Add(client);
-
+            Log.Information("Client created and added to List succesfully");
             string json = JsonConvert.SerializeObject(clients);
             System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+            Log.Information("Updated DBjson");
             return client;
         }
         public InternalClient updateClients(string address, string phone, string codigo)
@@ -61,16 +64,20 @@ namespace ClientLogic.Manager
                 if (c.CodigoCliente == codigo)
                     c.Direccion = address; c.Telefono = phone; client =c;
             });
+            Log.Information("Client edited succesfully");
             string json = JsonConvert.SerializeObject(clients);
             System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+            Log.Information("Updated DBjson");
             return client;
         }
         public InternalClient removeClients(string codigo)
         {
             InternalClient client = clients.Find(p => p.CodigoCliente == codigo);
             clients.Remove(client);
+            Log.Information("Client deleted succesfully");
             string json = JsonConvert.SerializeObject(clients);
             System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+            Log.Information("Updated DBjson");
             return client;
         }
 
@@ -81,7 +88,7 @@ namespace ClientLogic.Manager
             for (int i = 0; i < clientes; i++)
             {
                 var externalClient = _service.GetClient();
-                //map External To Internal
+                Log.Information("Retrieved External Clients Successfully");
                 string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "_-" + externalClient.Result.Id.ToString();
                 client = new InternalClient()
                 {
