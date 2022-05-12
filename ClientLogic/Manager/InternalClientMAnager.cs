@@ -5,7 +5,7 @@ using ExternalCServices;
 using Newtonsoft.Json;
 using ClientLogic.Exceptions;
 using Microsoft.AspNetCore.Http;
-
+using Serilog;
 namespace ClientLogic.Manager
 {
 	public class InternalClientManager
@@ -25,14 +25,15 @@ namespace ClientLogic.Manager
         {
             try
             {
+                Log.Information("Clients Retrieved Succesfully");
                 return JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
+                
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message); //agregar log
                 throw new ClientDatabaseException("Couldn't read json file");
             }
-           
         }
         public InternalClient createClients(string name, string lastname,string seclastname, int CI, string address, string phone, int ranking)
         {
@@ -53,6 +54,7 @@ namespace ClientLogic.Manager
             client = new InternalClient() { Nombre = name, ApellidoPaterno = lastname, ApellidoMaterno = seclastname, CI = CI, Direccion = address, Telefono = phone, Ranking = ranking, CodigoCliente = codigocliente };
             clients.Add(client);
             WriteJson(clients);
+            Log.Information("Client created and added to List succesfully");
             return client;
 
         }
@@ -64,6 +66,7 @@ namespace ClientLogic.Manager
                 client.Direccion = address;
                 client.Telefono = phone;
                 WriteJson(clients);
+                Log.Information("Client edited succesfully");
             }
             else
             {
@@ -78,6 +81,7 @@ namespace ClientLogic.Manager
             {
                 clients.Remove(client);
                 WriteJson(clients);
+                Log.Information("Client deleted succesfully");
             }
             else
             {
@@ -94,6 +98,7 @@ namespace ClientLogic.Manager
             for (int i = 0; i < clientes; i++)
             {
                 var externalClient = _service.GetClient();
+                Log.Information("Retrieved External Clients Successfully");
                 string codigocliente = externalClient.Result.First_name[0].ToString().ToUpper() + externalClient.Result.Last_name[0].ToString().ToUpper() + "_-" + externalClient.Result.Id.ToString();
                 client = new InternalClient()
                 {
@@ -117,6 +122,7 @@ namespace ClientLogic.Manager
             {
                 string json = JsonConvert.SerializeObject(clients);
                 System.IO.File.WriteAllText(config.GetSection("client_path").Value, json);
+                Log.Information("Updated DBjson");
             }
             catch (Exception ex)
             {
