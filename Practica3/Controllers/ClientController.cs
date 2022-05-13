@@ -37,10 +37,6 @@ namespace Practica3.Controllers
         }
         [HttpPut]
         [Route("/internal-clients")]
-        /*public IActionResult Put([FromHeader]string Codigo,[FromHeader]string Direccion, [FromHeader]string Telefono)
-        {
-            return Ok(_internalClientManager.updateClients(Direccion, Telefono, Codigo));SSV-7989989
-        }*/
         public IActionResult Put([FromBody] InternalClient client)
         {
             return Ok(_internalClientManager.updateClients(client.Direccion, client.Telefono, client.CodigoCliente));
