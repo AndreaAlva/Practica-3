@@ -1,6 +1,7 @@
 ﻿using ExternalCServices.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,16 +29,19 @@ namespace ExternalCServices
                     {
                         string responseData = await reponse.Content.ReadAsStringAsync();
                         clients = JsonConvert.DeserializeObject<ExternalClient>(responseData);
+                        Log.Information("Client deserialized from Backing service successfully");
                     }
                     else
                     {
+                        Log.Information("Status code not successful, backing service error");
                         throw new ExternalClientServiceNotFoundException("Service not found");
                     }
                 }
                 return clients;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Log.Information(ex.Message);
                 throw new ExternalClientServiceException("Backing service external error");
             }
            

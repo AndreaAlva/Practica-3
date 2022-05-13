@@ -50,18 +50,7 @@ namespace ClientLogic.Manager
         {
             InternalClient client;
             string codigocliente;
-            if (String.IsNullOrEmpty(name))
-                throw new ClientInvalidInputException("Name cannot be empty");
-            if (String.IsNullOrEmpty(lastname))
-                throw new ClientInvalidInputException("Last name cannot be empty");
-            if (String.IsNullOrEmpty(address))
-                throw new ClientInvalidInputException("Address cannot be empty");
-            if (String.IsNullOrEmpty(phone))
-                throw new ClientInvalidInputException("Phone number cannot be empty");
-            if (CI.Equals(0) || CI.Equals(null))
-                throw new ClientInvalidInputException("CI cannot be empty");
-            if (ranking < 1 || ranking > 5)
-                throw new ClientInvalidInputException("Ranking out of range. Ranking should be between 1 and 5 ");
+            validatingParameters(name, lastname, seclastname, CI, address, phone, ranking);
             if (String.IsNullOrEmpty(seclastname))
             {
                 codigocliente = name[0].ToString().ToUpper() + lastname[0].ToString().ToUpper() + "_-" + CI.ToString();
@@ -87,55 +76,23 @@ namespace ClientLogic.Manager
             InternalClient client= clients.Find(c => c.CodigoCliente == codigo);
             if(client != null)
             {
-                if (!String.IsNullOrEmpty(name))
+                validatingParameters(name, lastName1, lastName2, ci, address, phone, ranking);
+                client.Nombre = name;
+                client.ApellidoPaterno = lastName1;
+                client.ApellidoMaterno = lastName2;
+                client.CI = ci;
+                client.Direccion = address;
+                client.Telefono = phone;
+                client.Ranking = ranking;
+                if (String.IsNullOrEmpty(lastName2))
                 {
-                    client.Nombre = name;
-                }
-                else { throw new ClientInvalidInputException("Invalid name"); }
-
-                if (!String.IsNullOrEmpty(address))
-                {
-                    client.Direccion = address; 
-                }
-                else { throw new ClientInvalidInputException("Invalid address"); }
-                
-                if (!String.IsNullOrEmpty(phone))
-                {
-                    client.Telefono = phone; 
+                    client.CodigoCliente = name[0].ToString().ToUpper() + lastName1[0].ToString().ToUpper() + "_-" + ci.ToString();
+                    lastName2 = "No Specified";
                 }
                 else
-                {throw new ClientInvalidInputException("Invalid phone");}
-
-                if (!String.IsNullOrEmpty(lastName1))
                 {
-                    client.ApellidoPaterno = lastName1;
+                    client.CodigoCliente = name[0].ToString().ToUpper() + lastName1[0].ToString().ToUpper() + lastName2[0].ToString().ToUpper() + "-" + ci.ToString();
                 }
-                else { throw new ClientInvalidInputException("Invalid 1st Last Name"); }
-
-                if (!String.IsNullOrEmpty(lastName2))
-                {
-                    client.ApellidoMaterno = lastName2;
-                }
-                else { throw new ClientInvalidInputException("Invalid 2nd Last Name"); }
-
-                if (!String.IsNullOrEmpty(ci.ToString()))
-                {
-                    client.CI = ci;
-                }
-                else { throw new ClientInvalidInputException("Invalid CI"); }
-
-                if (!String.IsNullOrEmpty(ranking.ToString()))
-                {
-                    if (ranking < 1 || ranking > 5)
-                    {
-                        throw new ClientInvalidInputException("Invalid Rank(Goes From 1 to 5)");
-                    }
-                    else
-                    {
-                        client.CI = ci;
-                    }
-                }
-                else { throw new ClientInvalidInputException("Invalid Rank"); }
                 WriteJson(clients);
                 Log.Information("Client edited succesfully");
             }
@@ -143,7 +100,7 @@ namespace ClientLogic.Manager
             {
                 throw new ClientNotFoundException("Client does not exist");
             }
-            client.CodigoCliente  = name[0].ToString().ToUpper() + lastName1[0].ToString().ToUpper() + lastName2[0].ToString().ToUpper() + "-" + ci.ToString();
+            
             return client;
         }
         public InternalClient removeClients(string codigo)
@@ -202,6 +159,22 @@ namespace ClientLogic.Manager
                 throw new ClientDatabaseException("Couldn't write jsonfile");
                 
             }
+        }
+        private void validatingParameters(string name, string lastname, string seclastname, int CI, string address, string phone, int ranking)
+        {
+            if (String.IsNullOrEmpty(name))
+                throw new ClientInvalidInputException("Name cannot be empty");
+            if (String.IsNullOrEmpty(lastname))
+                throw new ClientInvalidInputException("Last name cannot be empty");
+            if (String.IsNullOrEmpty(address))
+                throw new ClientInvalidInputException("Address cannot be empty");
+            if (String.IsNullOrEmpty(phone))
+                throw new ClientInvalidInputException("Phone number cannot be empty");
+            if (CI.Equals(0) || CI.Equals(null))
+                throw new ClientInvalidInputException("CI cannot be empty");
+            if (ranking < 1 || ranking > 5 )
+                throw new ClientInvalidInputException("Incorrect ranking. Ranking should be between 1 and 5 ");
+
         }
     }
 
