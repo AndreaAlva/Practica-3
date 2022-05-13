@@ -1,8 +1,8 @@
 using System;
 
-namespace ClientLogic.Models
+namespace Practica3
 {
-    public class InternalClient
+    public class Client
     {
         public string Nombre { get; set; }
         public string ApellidoPaterno { get; set; }
@@ -11,7 +11,6 @@ namespace ClientLogic.Models
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public int Ranking { get; set; }
-        public string CodigoCliente { get; set; }
 
     }
 }

@@ -24,10 +24,10 @@ namespace Practica3
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
+                .SetBasePath(env.ContentRootPath);
+                //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                //.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                //.AddEnvironmentVariables();
 
             Configuration = builder.Build();
             Log.Logger = new LoggerConfiguration()
@@ -45,7 +45,10 @@ namespace Practica3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors(op =>
+            {
+                op.AddPolicy("AllowAllOrigin", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -60,9 +63,8 @@ namespace Practica3
         {
             app.UseClientExceptionHandlerMiddleware();
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthorization();
 

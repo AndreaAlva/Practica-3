@@ -1,5 +1,4 @@
 ﻿using ClientLogic.Manager;
-using ClientLogic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,27 +29,29 @@ namespace Practica3.Controllers
         }
         [HttpPost]
         [Route("/internal-clients")]
-        public IActionResult Post([FromBody]InternalClient client)
+        public IActionResult Post([FromBody]Client client)
         {
-            InternalClient created = _internalClientManager.createClients(client.Nombre, client.ApellidoPaterno, client.ApellidoMaterno, client.CI, client.Direccion, client.Telefono, client.Ranking);
-            return Ok(created);
+            return Ok(_internalClientManager.createClients(client.Nombre, client.ApellidoPaterno, client.ApellidoMaterno, client.CI, client.Direccion, client.Telefono, client.Ranking));
+            
         }
         [HttpPut]
         [Route("/internal-clients")]
-        public IActionResult Put([FromBody] InternalClient client)
+        public IActionResult Put([FromBody]Client client, [FromHeader]string CodigoCliente)
         {
-            return Ok(_internalClientManager.updateClients(client.Direccion, client.Telefono, client.CodigoCliente));
+            return Ok(_internalClientManager.updateClients(client.Direccion, client.Telefono, CodigoCliente));
         }
         [HttpDelete]
         [Route("/internal-clients")]
-        public IActionResult Delete([FromHeader]string Codigo)
-        {   
-            return Ok(_internalClientManager.removeClients(Codigo));
-        }
-       /* public IActionResult Delete([FromBody] InternalClient client)
+        public IActionResult Delete([FromBody]ClientLogic.Models.InternalClient client)
         {
             return Ok(_internalClientManager.removeClients(client.CodigoCliente));
-        }*/
+        }
+        [HttpDelete]
+        [Route("/internal-clients/{codigoCliente}")]
+        public IActionResult Delete(string codigoCliente)
+        {
+            return Ok(_internalClientManager.removeClients(codigoCliente));
+        }
 
         [HttpGet]
         [Route("/external-clients")]
