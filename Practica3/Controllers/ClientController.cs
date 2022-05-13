@@ -30,10 +30,6 @@ namespace Practica3.Controllers
         }
         [HttpPost]
         [Route("/internal-clients")]
-        /* public IActionResult Post([FromHeader]string Nombre,[FromHeader]string PrimerApellido, [FromHeader]string SegundoApellido,[FromHeader] int CI, [FromHeader]string Direccion,[FromHeader]string Telefono, [FromHeader]int Ranking )
-         {
-             return Ok(_internalClientManager.createClients(Nombre, PrimerApellido, SegundoApellido, CI, Direccion, Telefono, Ranking));
-         }*/
         public IActionResult Post([FromBody]InternalClient client)
         {
             InternalClient created = _internalClientManager.createClients(client.Nombre, client.ApellidoPaterno, client.ApellidoMaterno, client.CI, client.Direccion, client.Telefono, client.Ranking);
@@ -41,9 +37,13 @@ namespace Practica3.Controllers
         }
         [HttpPut]
         [Route("/internal-clients")]
-        public IActionResult Put([FromHeader]string Codigo,[FromHeader]string Direccion, [FromHeader]string Telefono)
+        /*public IActionResult Put([FromHeader]string Codigo,[FromHeader]string Direccion, [FromHeader]string Telefono)
         {
-            return Ok(_internalClientManager.updateClients(Direccion, Telefono, Codigo));
+            return Ok(_internalClientManager.updateClients(Direccion, Telefono, Codigo));SSV-7989989
+        }*/
+        public IActionResult Put([FromBody] InternalClient client)
+        {
+            return Ok(_internalClientManager.updateClients(client.Direccion, client.Telefono, client.CodigoCliente));
         }
         [HttpDelete]
         [Route("/internal-clients")]
@@ -51,6 +51,10 @@ namespace Practica3.Controllers
         {   
             return Ok(_internalClientManager.removeClients(Codigo));
         }
+       /* public IActionResult Delete([FromBody] InternalClient client)
+        {
+            return Ok(_internalClientManager.removeClients(client.CodigoCliente));
+        }*/
 
         [HttpGet]
         [Route("/external-clients")]
