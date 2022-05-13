@@ -70,7 +70,7 @@ namespace ClientLogic.Manager
             }
             else
             {
-                throw new ClientNotFoundException("Client does not exists");
+                throw new ClientNotFoundException("Client does not exist");
             }
             return client;
         }
@@ -81,12 +81,11 @@ namespace ClientLogic.Manager
             {
                 clients.Remove(client);
                 WriteJson(clients);
-                Log.Information("Client deleted succesfully");
+                Log.Information("Client deleted succesfully");    
             }
             else
             {
-                throw new ClientNotFoundException("Client does not exists");
-               
+                throw new ClientNotFoundException("Client does not exist");
             }
             return client;
         }

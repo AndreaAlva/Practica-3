@@ -31,14 +31,14 @@ namespace ExternalCServices
                     }
                     else
                     {
-                        throw new ExternalClientServiceNotFoundException("Service not found ");
+                        throw new ExternalClientServiceNotFoundException("Service not found");
                     }
                 }
                 return clients;
             }
             catch(Exception)
             {
-                throw new ExternalClientServiceException("Something happend: Backing service error");
+                throw new ExternalClientServiceException("Backing service external error");
             }
            
         }

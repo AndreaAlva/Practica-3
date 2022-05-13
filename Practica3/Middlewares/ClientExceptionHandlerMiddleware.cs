@@ -36,30 +36,31 @@ namespace Practica3.Middlewares
         {
             string message="";
             int code = (int)HttpStatusCode.OK;
-            if (e.InnerException is ExternalClientServiceException)
-            {
-                message = e.Message;
-                code = (int)HttpStatusCode.InternalServerError;
-            }
+            
             if(e is ExternalClientServiceNotFoundException)
             {
                 message = "External Backing Service error: "+e.Message;
-                code = (int)HttpStatusCode.NotFound;
             }
-            if(e is ClientDatabaseException)
+            else if (e is ClientInvalidInputException)
+            {
+                message = "Invalid input data: " + e.Message;
+            }
+            else if(e is ClientDatabaseException)
             {
                 message = "Database error: "+ e.Message;
-                code = (int)HttpStatusCode.NotFound;
             }
-            if(e is ClientInvalidInputException)
+            else if (e is ClientNotFoundException)
             {
-                message = "Invalid input data: "+e.Message;
-                code = (int)HttpStatusCode.BadRequest;
+                message = "Client error: "+ e.Message;
             }
-            
-            if (e is ClientNotFoundException)
+            else if (e.InnerException is ExternalClientServiceException)
             {
-                message = "Client error: "+e.Message;
+                message = e.Message;
+            }
+            else
+            {
+                message = e.Message;
+                code = (int)HttpStatusCode.InternalServerError;
             }
             var response = new { message, code };
             httpContext.Response.ContentType = "application/json";

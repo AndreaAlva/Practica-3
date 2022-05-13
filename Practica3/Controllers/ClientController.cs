@@ -49,7 +49,7 @@ namespace Practica3.Controllers
 
         [HttpGet]
         [Route("/external-clients")]
-        public IActionResult GetExternals([FromHeader]int clients)  //clients es el numero de clientes externos que se quiere pedir 
+        public IActionResult GetExternals([FromHeader]int clients) 
         {
             return Ok(_internalClientManager.GetExternalClients(clients));
         }
