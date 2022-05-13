@@ -38,7 +38,8 @@ namespace Practica3.Controllers
         [Route("/internal-clients")]
         public IActionResult Put([FromBody]Client client, [FromHeader]string CodigoCliente)
         {
-            return Ok(_internalClientManager.updateClients(client.Direccion, client.Telefono, CodigoCliente));
+            //return Ok(_internalClientManager.updateClients(client.Direccion, client.Telefono, CodigoCliente));
+            return Ok(_internalClientManager.updateClients(client.Nombre, client.ApellidoPaterno, client.ApellidoMaterno, client.CI, client.Direccion, client.Telefono, client.Ranking, CodigoCliente));
         }
         [HttpDelete]
         [Route("/internal-clients")]

@@ -30,9 +30,8 @@ namespace ClientLogic.Manager
                 return JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
 
             }
-            catch (Exception ex)
-            {
-                Log.Information(ex.Message);
+            catch
+            {            
                 throw new ClientDatabaseException("Couldn't read json file");
             }
         }
@@ -72,24 +71,60 @@ namespace ClientLogic.Manager
             return client;
 
         }
-        public InternalClient updateClients(string address, string phone,  string codigo)
+        public InternalClient updateClients(string name, string lastName1, string lastName2, int ci, string address, string phone, int ranking, string codigo)
         {
             InternalClient client= clients.Find(c => c.CodigoCliente == codigo);
             if(client != null)
             {
+                if (!String.IsNullOrEmpty(name))
+                {
+                    client.Nombre = name;
+                }
+                else { throw new ClientInvalidInputException("Invalid name"); }
+
                 if (!String.IsNullOrEmpty(address))
                 {
                     client.Direccion = address; 
                 }
-                else { throw new ClientInvalidInputException("Invalid address"); }  
+                else { throw new ClientInvalidInputException("Invalid address"); }
+                
                 if (!String.IsNullOrEmpty(phone))
                 {
                     client.Telefono = phone; 
                 }
                 else
+                {throw new ClientInvalidInputException("Invalid phone");}
+
+                if (!String.IsNullOrEmpty(lastName1))
                 {
-                    throw new ClientInvalidInputException("Invalid phone");
+                    client.ApellidoPaterno = lastName1;
                 }
+                else { throw new ClientInvalidInputException("Invalid 1st Last Name"); }
+
+                if (!String.IsNullOrEmpty(lastName2))
+                {
+                    client.ApellidoMaterno = lastName2;
+                }
+                else { throw new ClientInvalidInputException("Invalid 2nd Last Name"); }
+
+                if (!String.IsNullOrEmpty(ci.ToString()))
+                {
+                    client.CI = ci;
+                }
+                else { throw new ClientInvalidInputException("Invalid CI"); }
+
+                if (!String.IsNullOrEmpty(ranking.ToString()))
+                {
+                    if (ranking < 1 || ranking > 5)
+                    {
+                        throw new ClientInvalidInputException("Invalid Rank(Goes From 1 to 5)");
+                    }
+                    else
+                    {
+                        client.CI = ci;
+                    }
+                }
+                else { throw new ClientInvalidInputException("Invalid Rank"); }
                 WriteJson(clients);
                 Log.Information("Client edited succesfully");
             }
@@ -97,6 +132,7 @@ namespace ClientLogic.Manager
             {
                 throw new ClientNotFoundException("Client does not exist");
             }
+            client.CodigoCliente  = name[0].ToString().ToUpper() + lastName1[0].ToString().ToUpper() + lastName2[0].ToString().ToUpper() + "-" + ci.ToString();
             return client;
         }
         public InternalClient removeClients(string codigo)

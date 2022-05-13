@@ -9,6 +9,7 @@ using ExternalCServices.Exceptions;
 using ClientLogic.Exceptions;
 using System.Net;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Practica3.Middlewares
 {
@@ -65,6 +66,7 @@ namespace Practica3.Middlewares
             var response = new { message, code };
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = code;
+            Log.Error(message);
             return httpContext.Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
     }
