@@ -18,8 +18,19 @@ namespace ClientLogic.Manager
         public InternalClientManager(ClientGenerator service,IConfiguration configuration)
         {
             _service = service;
-            clients = new List<InternalClient>();
             config = configuration;
+            try
+            {
+                if (clients == null)
+                {
+                    Log.Information("Clients deserialized Succesfully");
+                    clients = JsonConvert.DeserializeObject<List<InternalClient>>(System.IO.File.ReadAllText(config.GetSection("client_path").Value));
+                }
+            }
+            catch(Exception )
+            {
+                throw new ClientDatabaseException("Couldn't read and deserialize json file");
+            }
         }
 
         public List<InternalClient> getClients()
